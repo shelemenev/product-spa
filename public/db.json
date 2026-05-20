@@ -1,0 +1,28 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Смарт-часы X100",
+      "price": 7490,
+      "category": "Гаджеты",
+      "image": "/img/x100.jpg",
+      "description": "Водонепроницаемые, GPS, 7-дневный аккумулятор"
+    },
+    {
+      "id": 2,
+      "title": "Наушники Pro Wireless",
+      "price": 4990,
+      "category": "Аудио",
+      "image": "https://picsum.photos/id/2/300/200",
+      "description": "Активное шумоподавление, 20 часов работы"
+    },
+    {
+      "id": 3,
+      "title": "Фитнес-браслет FitBand 5",
+      "price": 2990,
+      "category": "Гаджеты",
+      "image": "https://picsum.photos/id/3/300/200",
+      "description": "Шагомер, пульсометр, водозащита"
+    }
+  ]
+}

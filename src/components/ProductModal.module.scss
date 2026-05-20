@@ -1,4 +1,4 @@
-.modal-overlay {
+.ModalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.ModalContent {
   background: white;
   padding: 2rem;
   border-radius: 8px;
@@ -21,7 +21,7 @@
   position: relative;
 }
 
-.modal-close {
+.ModalClose {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -31,13 +31,13 @@
   cursor: pointer;
 }
 
-.modal-image {
+.ModalImage {
   max-width: 100%;
   height: auto;
   margin-bottom: 1rem;
 }
 
-.buy-button {
+.BuyButton {
   background: #007bff;
   color: white;
   border: none;

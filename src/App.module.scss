@@ -12,14 +12,14 @@ body {
   background-color: #f8f9fa;
 }
 
-.app-header {
+.AppHeader {
   background: white;
   padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   text-align: center;
 }
 
-.search-input {
+.SearchInput {
   width: 100%;
   max-width: 400px;
   padding: 0.5rem;
@@ -29,7 +29,7 @@ body {
   font-size: 1rem;
 }
 
-.products-grid {
+.ProductsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
@@ -38,7 +38,7 @@ body {
   margin: 0 auto;
 }
 
-.product-card {
+.ProductCard {
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
@@ -48,11 +48,11 @@ body {
   transition: transform 0.2s;
 }
 
-.product-card:hover {
+.ProductCard:hover {
   transform: translateY(-5px);
 }
 
-.product-image {
+.ProductImage {
   width: 100%;
   height: 150px;
   object-fit: cover;
@@ -60,13 +60,13 @@ body {
   margin-bottom: 1rem;
 }
 
-.product-name {
+.ProductName {
   font-size: 1.1rem;
   margin: 0.5rem 0;
   color: #333;
 }
 
-.product-price {
+.ProductPrice {
   font-weight: bold;
   color: #007bff;
   margin: 0;
@@ -74,50 +74,50 @@ body {
 
 /* Адаптивность для мобильных устройств (≤480px) */
 @media (max-width: 480px) {
-  .app-header {
+  .AppHeader {
     padding: 1rem;
   }
   
-  .search-input {
+  .SearchInput {
     font-size: 0.9rem;
     padding: 0.4rem;
   }
   
-  .products-grid {
+  .ProductsGrid {
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 1rem;
   }
   
-  .product-card {
+  .ProductCard {
     padding: 1rem;
   }
   
-  .modal-content {
+  .ModalContent {
     padding: 1rem;
   }
 }
 
 /* Адаптивность для планшетов (≤768px) */
 @media (max-width: 768px) {
-  .products-grid {
+  .ProductsGrid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
     padding: 1.5rem;
   }
   
-  .app-header h1 {
+  .AppHeader h1 {
     font-size: 1.5rem;
   }
 }
 
 /* Для десктопа (≥1024px) — дополнительные стили */
 @media (min-width: 1024px) {
-  .products-grid {
+  .ProductsGrid {
     gap: 3rem;
   }
   
-  .product-card {
+  .ProductCard {
     padding: 2rem;
   }
 }
