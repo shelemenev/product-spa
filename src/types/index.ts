@@ -9,6 +9,5 @@ export interface Product {
 
 export interface ModalProps {
   product: Product | null
-  isOpen: boolean
   onClose: () => void
 }

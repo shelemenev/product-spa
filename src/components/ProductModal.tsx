@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { ModalProps } from '../types'
 import styles from './ProductModal.module.scss'
 
-const ProductModal: React.FC<ModalProps> = ({ product, isOpen, onClose }) => {
+const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
 
-    if (isOpen) {
+    if (product) {
       document.addEventListener('keydown', handleEscape)
       document.body.style.overflow = 'hidden'
     }
@@ -16,10 +16,10 @@ const ProductModal: React.FC<ModalProps> = ({ product, isOpen, onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleEscape)
       document.body.style.overflow = 'unset'
-    };
-  }, [isOpen, onClose])
+    }
+  }, [product, onClose])
 
-  if (!isOpen || !product) return null
+  if (!product) return null
 
   return (
     <div className={styles.ModalOverlay} onClick={onClose}>

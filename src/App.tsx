@@ -8,7 +8,6 @@ function App() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -37,19 +36,17 @@ function App() {
   useEffect(() => {
     const filtered = products.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    )
     setFilteredProducts(filtered)
   }, [searchTerm, products])
 
   const openModal = (product: Product) => {
     setSelectedProduct(product)
-    setIsModalOpen(true)
-  };
+  }
 
   const closeModal = () => {
     setSelectedProduct(null)
-    setIsModalOpen(false)
-  };
+  }
 
   if (loading) {
     return (
@@ -61,7 +58,7 @@ function App() {
           <p>Загрузка товаров...</p>
         </main>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -74,7 +71,7 @@ function App() {
           <p className={styles.ErrorMessage}>{error}</p>
         </main>
       </div>
-    );
+    )
   }
 
   return (
@@ -106,7 +103,6 @@ function App() {
 
       <ProductModal
         product={selectedProduct}
-        isOpen={isModalOpen}
         onClose={closeModal}
       />
     </div>
