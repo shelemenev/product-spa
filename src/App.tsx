@@ -12,25 +12,21 @@ function App() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    setTimeout( () => 
-      fetch('/db.json')
-        .then(res => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`)
-          }
-          return res.json()
-        })
-        .then(data => {
+    setTimeout(async () => {
+      try {
+        const res = await fetch('/db.json')
+        const data = await res.json()
+        if (data) {
           setProducts(data.products)
           setFilteredProducts(data.products)
           setLoading(false)
-        })
-        .catch(err => {
-          console.error('Ошибка загрузки данных:', err)
-          setError('Не удалось загрузить данные товаров')
-          setLoading(false)
         }
-      ), 1000)
+      } catch (err) {
+        console.error('Ошибка загрузки данных:', err)
+        setError('Не удалось загрузить данные товаров')
+        setLoading(false)
+      }
+    }, 1000)
   }, [])
 
   useEffect(() => {
