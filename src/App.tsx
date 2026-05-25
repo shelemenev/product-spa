@@ -1,54 +1,54 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import ProductModal from './components/ProductModal'
 import { Product } from './types'
 import styles from './App.module.scss'
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Загрузка данных
   useEffect(() => {
-    fetch('/db.json')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+    setTimeout( () => 
+      fetch('/db.json')
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`)
+          }
+          return res.json()
+        })
+        .then(data => {
+          setProducts(data.products)
+          setFilteredProducts(data.products)
+          setLoading(false)
+        })
+        .catch(err => {
+          console.error('Ошибка загрузки данных:', err)
+          setError('Не удалось загрузить данные товаров')
+          setLoading(false)
         }
-        return res.json();
-      })
-      .then(data => {
-        setProducts(data.products);
-        setFilteredProducts(data.products);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Ошибка загрузки данных:', err);
-        setError('Не удалось загрузить данные товаров');
-        setLoading(false);
-      });
-  }, []);
+      ), 1000)
+  }, [])
 
-  // Фильтр товаров
   useEffect(() => {
     const filtered = products.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setFilteredProducts(filtered);
-  }, [searchTerm, products]);
+    setFilteredProducts(filtered)
+  }, [searchTerm, products])
 
   const openModal = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
+    setSelectedProduct(product)
+    setIsModalOpen(true)
   };
 
   const closeModal = () => {
-    setSelectedProduct(null);
-    setIsModalOpen(false);
+    setSelectedProduct(null)
+    setIsModalOpen(false)
   };
 
   if (loading) {
@@ -110,7 +110,7 @@ function App() {
         onClose={closeModal}
       />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

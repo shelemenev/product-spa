@@ -72,7 +72,6 @@ body {
   margin: 0;
 }
 
-/* Адаптивность для мобильных устройств (≤480px) */
 @media (max-width: 480px) {
   .AppHeader {
     padding: 1rem;
@@ -98,7 +97,6 @@ body {
   }
 }
 
-/* Адаптивность для планшетов (≤768px) */
 @media (max-width: 768px) {
   .ProductsGrid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -111,7 +109,6 @@ body {
   }
 }
 
-/* Для десктопа (≥1024px) — дополнительные стили */
 @media (min-width: 1024px) {
   .ProductsGrid {
     gap: 3rem;

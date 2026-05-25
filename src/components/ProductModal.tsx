@@ -5,21 +5,21 @@ import styles from './ProductModal.module.scss'
 const ProductModal: React.FC<ModalProps> = ({ product, isOpen, onClose }) => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
+      if (e.key === 'Escape') onClose()
+    }
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'unset'
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose])
 
-  if (!isOpen || !product) return null;
+  if (!isOpen || !product) return null
 
   return (
     <div className={styles.ModalOverlay} onClick={onClose}>
@@ -32,7 +32,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, isOpen, onClose }) => {
         <button className={styles.BuyButton}>Купить</button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductModal;
+export default ProductModal
