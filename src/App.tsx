@@ -44,32 +44,6 @@ function App() {
     setSelectedProduct(null)
   }
 
-  if (loading) {
-    return (
-      <div className={styles.App}>
-        <header className={styles.AppHeader}>
-          <h1>Магазин товаров</h1>
-        </header>
-        <main className={styles.ProductsGrid}>
-          <p>Загрузка товаров...</p>
-        </main>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className={styles.App}>
-        <header className={styles.AppHeader}>
-          <h1>Магазин товаров</h1>
-        </header>
-        <main className={styles.ProductsGrid}>
-          <p className={styles.ErrorMessage}>{error}</p>
-        </main>
-      </div>
-    )
-  }
-
   return (
     <div className={styles.App}>
       <header className={styles.AppHeader}>
@@ -84,7 +58,10 @@ function App() {
       </header>
 
       <main className={styles.ProductsGrid}>
-        {filteredProducts.map(product => (
+        {!!loading && <p>Загрузка товаров...</p>}
+        {!!error && <p className={styles.ErrorMessage}>{error}</p>}
+        {!loading && filteredProducts.length === 0 && <p className={styles.ErrorMessage}>Попробуйте ввести другое наименование</p>}
+        {filteredProducts.length > 0 && filteredProducts.map(product => (
           <div
             key={product.id}
             className={styles.ProductCard}
