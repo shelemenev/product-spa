@@ -1,48 +1,99 @@
+// Вспомогательный класс для блокировки скролла на body
+.bodyNoScroll {
+  overflow: hidden;
+}
+
 .ModalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0; // вместо top/left/right/bottom — короче и современнее
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .ModalContent {
-  background: white;
+  background: #ffffff;
   padding: 2rem;
-  border-radius: 8px;
-  max-width: 90%;
+  border-radius: 12px;
+  max-width: 560px;       // фиксируем максимальную ширину для десктопа
+  width: 100%;            // на мобильных — во всю ширину с отступом из overlay
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15); // приятный мягкий тень
+  display: flex;
+  flex-direction: column;
 }
 
 .ModalClose {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 16px;
+  right: 16px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: #555;
   cursor: pointer;
+  padding: 8px;
+  z-index: 10;
+
+  &:hover {
+    color: #000;
+    transform: scale(1.1);
+  }
 }
 
 .ModalImage {
   max-width: 100%;
   height: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  display: block;
+}
+
+.ModalTitle {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.625rem;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+
+.ModalDescription {
+  margin: 0 0 1.5rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+  flex-grow: 1; // позволяет кнопке оставаться внизу при разной длине описания
+}
+
+.ModalPrice {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #222;
 }
 
 .BuyButton {
   background: #007bff;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  padding: 0.875rem 1.5rem;
+  border-radius: 6px;
   cursor: pointer;
   width: 100%;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 }

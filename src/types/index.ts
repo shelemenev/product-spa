@@ -1,12 +1,16 @@
 export interface Product {
-  title: string
-  id: number
-  price: number
-  image: string
-  description: string
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  description: string;
+  // сюда можно добавлять любые новые поля — модалка их не «подтянет» автоматически
 }
 
+// Явно описываем, что нужно модалке: это и есть правильное применение Omit
+export type ProductForModal = Omit<Product, 'id' >
+
 export interface ModalProps {
-  product: Product | null
-  onClose: () => void
+  product?: ProductForModal          // опциональность вместо Product | null 
+  onClose: () => void                // держим onClose стабильным снаружи
 }
