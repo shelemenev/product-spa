@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import ProductModal from './components/ProductModal'
-import { Product } from './types'
+import ProductCard from './components/ProductCard'
+import { Product } from './types/types'
 import styles from './App.module.scss'
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  // selectedProduct теперь совместим с product?: ProductForModal (поскольку Product содержит все нужные поля)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -33,7 +33,7 @@ function App() {
         setLoading(false)
       }
     }, 1000)
-  }, [])
+  }, []);
 
   useEffect(() => {
     const filtered = products.filter((product) =>
@@ -44,11 +44,11 @@ function App() {
 
   const openModal = useCallback((product: Product) => {
     setSelectedProduct(product)
-  }, [])
+  }, []);
 
   const closeModal = useCallback(() => {
     setSelectedProduct(null)
-  }, [])
+  }, []);
 
   return (
     <div className={styles.App}>
@@ -79,30 +79,16 @@ function App() {
 
         {filteredProducts.length > 0 &&
           filteredProducts.map((product) => (
-            <div
+            <ProductCard
               key={product.id}
-              className={styles.ProductCard}
-              onClick={() => openModal(product)}
-              role="article"
-              aria-label={product.title}
-            >
-              <img
-                src={product.image}
-                alt={product.title}
-                className={styles.ProductImage}
-                loading="lazy"
-              />
-              <h3 className={styles.ProductName}>{product.title}</h3>
-              <p className={styles.ProductPrice}>
-                {product.price.toLocaleString('ru-RU')} руб.
-              </p>
-            </div>
+              product={product}
+              onClick={openModal}
+            />
           ))}
       </main>
 
-      {/* ProductModal получает стабильный onClose, поэтому его useEffect не будет лишний раз перезапускаться */}
       <ProductModal
-        product={selectedProduct ?? undefined} // преобразуем null в undefined для опционального пропса
+        product={selectedProduct ?? undefined}
         onClose={closeModal}
       />
     </div>

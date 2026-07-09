@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ModalProps } from '../types'
+import { ModalProps } from '../types/types'
 import styles from './ProductModal.module.scss'
 
 const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
@@ -55,7 +55,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default ProductModal
