@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Product } from '../types/types'
 import styles from './ProductCard.module.scss'
 
@@ -7,12 +7,28 @@ interface ProductCardProps {
   onClick?: (product: Product) => void
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
-  const handleClick = () => {
+const ProductCard = ({ product, onClick }: ProductCardProps) => {
+  const handleClick = useCallback<VoidFunction>(() => {
     if (onClick) {
       onClick(product)
     }
-  };
+  },[product, onClick])
+
+const onKeyDown = useCallback<(e: React.KeyboardEvent<HTMLDivElement>) => void>(
+  (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick()
+    } 
+  },
+  [handleClick]
+)
+
+const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value)
+  },
+  []
+)
 
   return (
     <div
@@ -22,12 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
       role="article"
       aria-label={product.title}
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          handleClick()
-        }
-      }}
+      onKeyDown={onKeyDown}
     >
       <img
         src={product.image}
@@ -39,6 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
       <p className={styles.ProductPrice}>
         {product.price.toLocaleString('ru-RU')} руб.
       </p>
+      <input onChange={onChange} />
     </div>
   )
 }
