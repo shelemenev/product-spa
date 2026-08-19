@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { ModalProps } from '../types/types'
 import styles from './ProductModal.module.scss'
 
-const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
+const ProductModal = ({ product, onClose }: ModalProps) => {
   useEffect(() => {
     if (!product) return
 
@@ -18,7 +18,7 @@ const ProductModal: React.FC<ModalProps> = ({ product, onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleEscape)
       document.body.classList.remove(styles.bodyNoScroll)
-    };
+    }
   }, [product, onClose])
 
   if (!product) {

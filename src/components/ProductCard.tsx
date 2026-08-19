@@ -3,36 +3,27 @@ import { Product } from '../types/types'
 import styles from './ProductCard.module.scss'
 
 interface ProductCardProps {
-  product: Product;
+  product: Product
   onClick?: (product: Product) => void
 }
 
 const ProductCard = ({ product, onClick }: ProductCardProps) => {
-  const handleClick = useCallback<VoidFunction>(() => {
-    if (onClick) {
-      onClick(product)
-    }
-  },[product, onClick])
+  const handleClick = useCallback(() => {
+    onClick?.(product)
+  }, [product, onClick])
 
-const onKeyDown = useCallback<(e: React.KeyboardEvent<HTMLDivElement>) => void>(
-  (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleClick()
-    } 
-  },
-  [handleClick]
-)
-
-const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
-  },
-  []
-)
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        handleClick()
+      }
+    },
+    [handleClick]
+  )
 
   return (
     <div
-      key={product.id}
       className={styles.ProductCard}
       onClick={handleClick}
       role="article"
@@ -50,7 +41,6 @@ const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       <p className={styles.ProductPrice}>
         {product.price.toLocaleString('ru-RU')} руб.
       </p>
-      <input onChange={onChange} />
     </div>
   )
 }
