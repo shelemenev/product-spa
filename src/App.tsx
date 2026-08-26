@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import ProductModal from './components/ProductModal'
 import ProductCard from './components/ProductCard'
 import { Product } from './types/types'
@@ -12,11 +12,11 @@ function App() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const timerId = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const res = await fetch('/db.json')
         if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`)
+          throw new Error(`HTTP error! status: \${res.status}`)
         }
         const data = await res.json()
 
@@ -34,7 +34,7 @@ function App() {
       }
     }, 1000)
 
-    return () => clearTimeout(timerId)
+    return () => clearTimeout(timer)
   }, [])
 
   const filtered = useMemo(
