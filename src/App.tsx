@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import ProductModal from './components/ProductModal'
 import ProductCard from './components/ProductCard'
-import { Product } from './types/types'
+import { Product, ProductModalHandle } from './types/types'
 import styles from './App.module.scss'
 
 function App() {
@@ -10,14 +10,13 @@ function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const modalRef = useRef<ProductModalHandle | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(async () => {
       try {
         const res = await fetch('/db.json')
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: \${res.status}`)
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
         const data = await res.json()
 
         if (Array.isArray(data.products)) {
@@ -48,11 +47,20 @@ function App() {
 
   const openModal = useCallback((product: Product) => {
     setSelectedProduct(product)
-  }, [])
+  }, []);
 
   const closeModal = useCallback(() => {
     setSelectedProduct(null)
   }, [])
+
+  useEffect(() => {
+    if (selectedProduct && modalRef.current?.close) {
+      const timer = setTimeout(() => {
+        modalRef.current?.close()
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [selectedProduct])
 
   return (
     <div className={styles.App}>
@@ -70,17 +78,14 @@ function App() {
 
       <main className={styles.ProductsGrid}>
         {loading && <p>Загрузка товаров...</p>}
-
         {error && (
           <p className={styles.ErrorMessage} role="alert">
             {error}
           </p>
         )}
-
         {!loading && filtered.length === 0 && (
           <p className={styles.ErrorMessage}>Попробуйте ввести другое наименование</p>
         )}
-
         {filtered.length > 0 &&
           filtered.map((product) => (
             <ProductCard
@@ -92,6 +97,7 @@ function App() {
       </main>
 
       <ProductModal
+        ref={modalRef}
         product={selectedProduct ?? undefined}
         onClose={closeModal}
       />

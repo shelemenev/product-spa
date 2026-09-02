@@ -3,13 +3,20 @@ export interface Product {
   title: string
   price: number
   image: string
-  description: string
+  description?: string
 }
 
-export type ProductForModal = Omit<Product, 'id'>
+export interface ProductCardProps {
+  product: Product
+  onClick?: (product: Product) => void
+}
 
 export interface ModalProps {
-  product?: ProductForModal
+  product?: Omit<Product, 'id'>
   onClose: () => void
+  scrollClassName?: string
 }
 
+export interface ProductModalHandle {
+  close: () => void
+}

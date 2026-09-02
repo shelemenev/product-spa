@@ -1,61 +1,107 @@
-import React, { useEffect } from 'react'
-import { ModalProps } from '../types/types'
+import {
+  useEffect,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
+import { ModalProps, ProductModalHandle } from '../types/types'
 import styles from './ProductModal.module.scss'
 
-const ProductModal = ({ product, onClose }: ModalProps) => {
-  useEffect(() => {
-    if (!product) return
+const ProductModal = forwardRef<ProductModalHandle, ModalProps>(
+  ({ product, onClose }, ref) => {
+    const closeButtonRef = useRef<HTMLButtonElement | null>(null)
+    const previousActiveElementRef = useRef<HTMLElement | null>(null)
+    
+    const scrollClassName = styles.bodyNoScroll
 
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose()
+    useEffect(() => {
+      if (!product) return
+
+      previousActiveElementRef.current = document.activeElement as HTMLElement | null
+
+      const button = closeButtonRef.current
+      if (button) {
+        button.focus()
       }
+
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose()
+        }
+      }
+
+      document.addEventListener('keydown', handleEscape)
+      document.body.classList.add(scrollClassName)
+
+      return () => {
+        const prev = previousActiveElementRef.current
+        if (prev && typeof prev.focus === 'function') {
+          prev.focus()
+        }
+        
+        document.removeEventListener('keydown', handleEscape)
+        document.body.classList.remove(scrollClassName)
+      };
+    }, [product, onClose, scrollClassName])
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        close: onClose,
+      }),
+      [onClose]
+    );
+
+    if (!product) {
+      return null
     }
 
-    document.addEventListener('keydown', handleEscape)
-    document.body.classList.add(styles.bodyNoScroll)
+    return (
+      <div
+        data-testid="modal-overlay"
+        className={styles.ModalOverlay}
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        <div className={styles.ModalContent} onClick={(e) => e.stopPropagation()}>
+          <button
+            ref={closeButtonRef}
+            className={styles.ModalClose}
+            onClick={onClose}
+            type="button"
+            aria-label="Закрыть модальное окно"
+          >
+            ✕
+          </button>
 
-    return () => {
-      document.removeEventListener('keydown', handleEscape)
-      document.body.classList.remove(styles.bodyNoScroll)
-    }
-  }, [product, onClose])
+          <img
+            src={product.image}
+            alt={product.title}
+            className={styles.ModalImage}
+            loading="lazy"
+          />
 
-  if (!product) {
-    return null
-  }
+          <h2 id="modal-title" className={styles.ModalTitle}>
+            {product.title}
+          </h2>
 
-  return (
-    <div className={styles.ModalOverlay} onClick={onClose} role="dialog" aria-modal="true">
-      <div className={styles.ModalContent} onClick={(e) => e.stopPropagation()}>
-        <button
-          className={styles.ModalClose}
-          onClick={onClose}
-          type="button"
-          aria-label="Закрыть модальное окно"
-        >
-          ✕
-        </button>
+          {product.description && (
+            <p className={styles.ModalDescription}>{product.description}</p>
+          )}
 
-        <img
-          src={product.image}
-          alt={product.title}
-          className={styles.ModalImage}
-          loading="lazy"
-        />
+          <p className={styles.ModalPrice}>
+            {product.price.toLocaleString('ru-RU')} руб.
+          </p>
 
-        <h2 className={styles.ModalTitle}>{product.title}</h2>
-        <p className={styles.ModalDescription}>{product.description}</p>
-        <p className={styles.ModalPrice}>
-          {product.price.toLocaleString('ru-RU')} руб.
-        </p>
-
-        <button className={styles.BuyButton} type="button">
-          Купить
-        </button>
+          <button className={styles.BuyButton} type="button">
+            Купить
+          </button>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+)
 
 export default ProductModal

@@ -1,11 +1,7 @@
-import React, { useCallback } from 'react'
-import { Product } from '../types/types'
+import { useCallback, KeyboardEvent } from 'react'
+import { ProductCardProps } from '../types/types'
 import styles from './ProductCard.module.scss'
-
-interface ProductCardProps {
-  product: Product
-  onClick?: (product: Product) => void
-}
+import React from 'react'
 
 const ProductCard = ({ product, onClick }: ProductCardProps) => {
   const handleClick = useCallback(() => {
@@ -13,7 +9,7 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
   }, [product, onClick])
 
   const onKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
+    (e: KeyboardEvent<HTMLDivElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault()
         handleClick()
@@ -38,11 +34,9 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
         loading="lazy"
       />
       <h3 className={styles.ProductName}>{product.title}</h3>
-      <p className={styles.ProductPrice}>
-        {product.price.toLocaleString('ru-RU')} руб.
-      </p>
+      <p className={styles.ProductPrice}>{product.price.toLocaleString()} руб.</p>
     </div>
   )
 }
 
-export default ProductCard
+export default React.memo(ProductCard)
