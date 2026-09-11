@@ -4,10 +4,10 @@ import {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import { ModalProps, ProductModalHandle } from '../types/types'
+import { ProductModalProps, ProductModalHandle } from '../types/types'
 import styles from './ProductModal.module.scss'
 
-const ProductModal = forwardRef<ProductModalHandle, ModalProps>(
+const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
   ({ product, onClose }, ref) => {
     const closeButtonRef = useRef<HTMLButtonElement | null>(null)
     const previousActiveElementRef = useRef<HTMLElement | null>(null)
@@ -15,8 +15,6 @@ const ProductModal = forwardRef<ProductModalHandle, ModalProps>(
     const scrollClassName = styles.bodyNoScroll
 
     useEffect(() => {
-      if (!product) return
-
       previousActiveElementRef.current = document.activeElement as HTMLElement | null
 
       const button = closeButtonRef.current
@@ -41,8 +39,8 @@ const ProductModal = forwardRef<ProductModalHandle, ModalProps>(
         
         document.removeEventListener('keydown', handleEscape)
         document.body.classList.remove(scrollClassName)
-      };
-    }, [product, onClose, scrollClassName])
+      }
+    }, [onClose, scrollClassName]) 
 
     useImperativeHandle(
       ref,
@@ -50,11 +48,7 @@ const ProductModal = forwardRef<ProductModalHandle, ModalProps>(
         close: onClose,
       }),
       [onClose]
-    );
-
-    if (!product) {
-      return null
-    }
+    )
 
     return (
       <div

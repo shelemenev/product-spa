@@ -1,7 +1,7 @@
-import { useCallback, KeyboardEvent } from 'react'
+import { useCallback, memo } from 'react'
+import type { KeyboardEvent } from 'react'
 import { ProductCardProps } from '../types/types'
 import styles from './ProductCard.module.scss'
-import React from 'react'
 
 const ProductCard = ({ product, onClick }: ProductCardProps) => {
   const handleClick = useCallback(() => {
@@ -39,4 +39,4 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
   )
 }
 
-export default React.memo(ProductCard)
+export default memo(ProductCard)

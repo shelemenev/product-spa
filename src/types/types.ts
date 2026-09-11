@@ -11,8 +11,8 @@ export interface ProductCardProps {
   onClick?: (product: Product) => void
 }
 
-export interface ModalProps {
-  product?: Omit<Product, 'id'>
+export interface ProductModalProps {
+  product: Product
   onClose: () => void
   scrollClassName?: string
 }

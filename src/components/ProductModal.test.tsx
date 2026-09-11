@@ -1,10 +1,11 @@
 import { test, vi, describe, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import ProductModal from './ProductModal'
-import { ProductModalHandle } from './../types/types'
+import { Product, ProductModalHandle } from '../types/types'
 import { useRef } from 'react'
 
-const mockProduct = {
+const mockProduct: Product = {
+  id: 1,
   title: 'Беспроводные наушники',
   price: 4990,
   image: '/images/headphones.jpg',
@@ -20,26 +21,13 @@ describe('ProductModal', () => {
     })
   })
 
-  test('не рендерит контент, если product не передан', () => {
-    render(<ProductModal product={undefined} onClose={vi.fn()} />)
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(screen.queryByText(mockProduct.title)).not.toBeInTheDocument()
-  })
-
-  test('рендерит модалку с данными продукта при наличии product', () => {
-    const mockProduct = {
-        title: 'Беспроводные наушники',
-        price: 4990,
-        image: '/images/headphones.jpg',
-        description: 'Отличные наушники с шумоподавлением',
-    }
-
+  test('рендерит модалку с данными продукта', () => {
     render(<ProductModal product={mockProduct} onClose={vi.fn()} />)
 
     expect(screen.getByText(mockProduct.title)).toBeInTheDocument()
 
     const priceDigits = String(mockProduct.price)
-    
+
     expect(screen.getByText((content) => {
         if (!content) return false
         const cleanContent = String(content).replace(/\s+/g, '')
@@ -71,7 +59,7 @@ describe('ProductModal', () => {
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  test('возвращает фокус элементу, который был активен до открытия модалки (или оставляет его там)', () => {
+  test('возвращает фокус элементу, который был активен до открытия модалки', () => {
     const onClose = vi.fn()
     const FocusWrapper = () => {
         const inputRef = useRef<HTMLInputElement | null>(null)
@@ -84,14 +72,14 @@ describe('ProductModal', () => {
     }
 
     render(<FocusWrapper />)
-    
+
     const input = screen.getByTestId('previous-focus-input')
     input.focus()
     expect(input).toHaveFocus()
 
     const closeBtn = screen.getByLabelText('Закрыть модальное окно')
     fireEvent.click(closeBtn)
-    
+
     expect(onClose).toHaveBeenCalledTimes(1)
     expect(input).toHaveFocus()
   })
