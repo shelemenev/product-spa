@@ -1,11 +1,10 @@
-// Вспомогательный класс для блокировки скролла на body
 .bodyNoScroll {
   overflow: hidden;
 }
 
 .ModalOverlay {
   position: fixed;
-  inset: 0; // вместо top/left/right/bottom — короче и современнее
+  inset: 0; 
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -19,12 +18,12 @@
   background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
-  max-width: 560px;       // фиксируем максимальную ширину для десктопа
-  width: 100%;            // на мобильных — во всю ширину с отступом из overlay
+  max-width: 560px;       
+  width: 100%;            
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15); // приятный мягкий тень
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15); 
   display: flex;
   flex-direction: column;
 }
@@ -68,7 +67,7 @@
   font-size: 0.95rem;
   line-height: 1.5;
   color: #333;
-  flex-grow: 1; // позволяет кнопке оставаться внизу при разной длине описания
+  flex-grow: 1; 
 }
 
 .ModalPrice {
