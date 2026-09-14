@@ -19,12 +19,15 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "eject": "react-scripts eject",
-    "serve": "http-server -p 3001 -c-1 build"
+    "serve": "http-server -p 3001 -c-1 build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {
@@ -48,6 +51,15 @@
     "http-server": ">=14.1.1",
     "jsdom": ">=29.1.1",
     "vite": ">=8.2.2",
-    "vitest": ">=4.1.11"
+    "vitest": ">=4.1.11",
+    "storybook": "^10.6.0",
+    "@storybook/react-webpack5": "^10.6.0",
+    "@storybook/preset-create-react-app": "^10.6.0",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/addon-onboarding": "^10.6.0",
+    "webpack": "latest",
+    "prop-types": "latest",
+    "eslint-plugin-storybook": "^10.6.0"
   }
 }
