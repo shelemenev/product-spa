@@ -1,6 +1,6 @@
-import React from 'react';
-import { Meta, StoryObj } from '@storybook/react';
-import ProductModal from './ProductModal';
+import React from 'react'
+import type { Meta, StoryObj } from '@storybook/react'
+import ProductModal from './ProductModal'
 import { Product } from '../types/types'
 
 const mockProduct: Product = {
@@ -14,24 +14,46 @@ const mockProduct: Product = {
 const meta: Meta<typeof ProductModal> = {
   title: 'Components/ProductModal',
   component: ProductModal,
-};
+  tags: ['autodocs'],
+  argTypes: {
+    product: {
+      description: 'Объект товара, отображаемый в модальном окне',
+      table: {
+        category: 'Данные',
+        type: { summary: 'Product' },
+      },
+    },
+    onClose: {
+      description: 'Колбэк закрытия модального окна',
+      table: {
+        category: 'Колбэки',
+        type: { summary: '() => void' },
+      },
+      action: 'onClose',
+    },
+  },
+  args: {
+    product: mockProduct,
+    onClose: () => console.log('onClick'),
+  },
+}
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof ProductModal>;
+type Story = StoryObj<typeof ProductModal>
 
 export const Opened: Story = {
   render: () => {
-    const [isOpen, setIsOpen] = React.useState(true);
+    const [isOpen, setIsOpen] = React.useState(true)
 
     const handleClose = () => {
-      setIsOpen(false);
-    };
+      setIsOpen(false)
+    }
 
     return isOpen ? (
       <ProductModal product={mockProduct} onClose={handleClose} />
     ) : (
       <button onClick={() => setIsOpen(true)}>Открыть модальное окно</button>
-    );
+    )
   },
-};
+}
