@@ -1,4 +1,4 @@
-import { render, screen, within, act } from '@testing-library/react'
+import { render, screen, within, act, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi, expect, describe, it, beforeEach, afterEach } from 'vitest'
 import App from './App'
@@ -35,6 +35,14 @@ describe('App Component', () => {
       formData: () => Promise.resolve(new FormData()),
       text: () => Promise.resolve(''),
     } as unknown as Response
+  }
+
+  const loadProducts = async (products: Product[]) => {
+    mockFetch.mockResolvedValueOnce(createMockResponse({ products }))
+    render(<App />)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000)
+    })
   }
 
   it('отображает индикатор загрузки при старте', async () => {
@@ -186,5 +194,113 @@ describe('App Component', () => {
     })
 
     expect(screen.getByText('Некорректный формат данных')).toBeInTheDocument()
+  })
+
+  it('при открытии модалки фокус устанавливается на кнопку закрытия', async () => {
+    await loadProducts([
+      { id: 1, title: 'Тестовый товар', price: 100, image: '/img.jpg', description: 'Описание' },
+    ])
+
+    vi.useRealTimers()
+
+    const card = screen.getByText('Тестовый товар')
+    await userEvent.click(card)
+
+    expect(screen.getByLabelText('Закрыть модальное окно')).toHaveFocus()
+  })
+
+  it('Escape закрывает модалку', async () => {
+    await loadProducts([
+      { id: 1, title: 'Тестовый товар', price: 100, image: '/img.jpg', description: 'Описание' },
+    ])
+
+    vi.useRealTimers()
+
+    const card = screen.getByText('Тестовый товар')
+    await userEvent.click(card)
+
+    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+
+    fireEvent.keyDown(document, { key: 'Escape' })
+
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument()
+  })
+
+  it('после закрытия модалки фокус возвращается на предыдущий элемент', async () => {
+    await loadProducts([
+      { id: 1, title: 'Тестовый товар', price: 100, image: '/img.jpg', description: 'Описание' },
+    ])
+
+    vi.useRealTimers()
+
+    const card = screen.getByRole('article', { name: /тестовый товар/i })
+    card.focus()
+    await userEvent.click(card)
+
+    expect(screen.getByLabelText('Закрыть модальное окно')).toHaveFocus()
+
+    const closeButton = screen.getByLabelText('Закрыть модальное окно')
+    await userEvent.click(closeButton)
+
+    expect(card).toHaveFocus()
+  })
+
+  it('модалка автоматически закрывается через 5 секунд через modalRef.current.close()', async () => {
+    await loadProducts([
+      { id: 1, title: 'Тестовый товар', price: 100, image: '/img.jpg', description: 'Описание' },
+    ])
+
+    const card = screen.getByText('Тестовый товар')
+    fireEvent.click(card)
+
+    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(4999)
+    })
+    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(1)
+    })
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument()
+  })
+
+  it('автозакрытие не вызывает onClose повторно после срабатывания', async () => {
+    await loadProducts([
+      { id: 1, title: 'Тестовый товар', price: 100, image: '/img.jpg', description: 'Описание' },
+    ])
+
+    const card = screen.getByText('Тестовый товар')
+    fireEvent.click(card)
+
+    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(5000)
+    })
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(5000)
+    })
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument()
+  })
+
+  it('ручное закрытие очищает таймер автозакрытия', async () => {
+    await loadProducts([
+      { id: 1, title: 'Тестовый товар', price: 100, image: '/img.jpg', description: 'Описание' },
+    ])
+
+    const card = screen.getByText('Тестовый товар')
+    fireEvent.click(card)
+
+    fireEvent.click(screen.getByLabelText('Закрыть модальное окно'))
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(5000)
+    })
+    expect(screen.queryByTestId('modal-overlay')).not.toBeInTheDocument()
   })
 })

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import ProductModal from './ProductModal'
 import { Product } from '../types/types'
@@ -44,7 +44,7 @@ type Story = StoryObj<typeof ProductModal>
 
 export const Opened: Story = {
   render: () => {
-    const [isOpen, setIsOpen] = React.useState(true)
+    const [isOpen, setIsOpen] = useState(true)
 
     const handleClose = () => {
       setIsOpen(false)

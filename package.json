@@ -18,17 +18,12 @@
     "build": "react-scripts build",
     "test": "vitest",
     "test:watch": "vitest --watch",
+    "lint": "eslint src/ --fix --ext .ts,.tsx",
+    "lint:check": "eslint src/ --ext .ts,.tsx",
     "eject": "react-scripts eject",
     "serve": "http-server -p 3001 -c-1 build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "plugin:storybook/recommended"
-    ]
   },
   "browserslist": {
     "production": [

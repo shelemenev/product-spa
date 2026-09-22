@@ -3,7 +3,7 @@ import {
   useRef,
   forwardRef,
   useImperativeHandle,
-} from 'react';
+} from 'react'
 import { ProductModalProps, ProductModalHandle } from '../types/types'
 import styles from './ProductModal.module.scss'
 

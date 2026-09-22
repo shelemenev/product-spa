@@ -23,7 +23,7 @@ function App() {
           setProducts(data.products)
         } else {
           setProducts([])
-          setError('Некорректный формат данных');
+          setError('Некорректный формат данных')
         }
       } catch (err) {
         console.error('Ошибка загрузки данных:', err)
@@ -52,6 +52,15 @@ function App() {
   const closeModal = useCallback(() => {
     setSelectedProduct(null)
   }, [])
+
+  useEffect(() => {
+    if (selectedProduct && modalRef.current?.close) {
+      const timer = setTimeout(() => {
+        modalRef.current?.close()
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [selectedProduct])
 
   return (
     <div className={styles.App}>
