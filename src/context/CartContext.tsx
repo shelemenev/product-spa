@@ -15,11 +15,17 @@ const loadFromStorage = (): CartItem[] => {
   }
 }
 
-export const CartProvider = ({ children }: { children: ReactNode }) => {
+export const CartProvider = ({
+  children,
+  initialItems,
+}: {
+  children: ReactNode
+  initialItems?: CartItem[]
+}) => {
   const [state, dispatch] = useReducer(
     cartReducer,
     undefined,
-    () => ({ items: loadFromStorage() })
+    () => ({ items: initialItems ?? loadFromStorage() })
   )
 
   useEffect(() => {

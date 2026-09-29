@@ -1,59 +1,60 @@
-import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import ProductModal from './ProductModal'
-import { Product } from '../../types/types'
+import { CartProvider } from '../../context/CartContext'
+import type { ProductModalProps, Product } from '../../types/types'
 
 const mockProduct: Product = {
-  id: 123,
-  title: 'Супер-товар',
-  price: 4990,
-  image: '/images/x100.jpg',
-  description: 'Краткое описание товара для примера',
+  id: 1,
+  title: 'Товар 1',
+  price: 1990,
+  image: '/images/a.jpg',
+  description: 'Описание первого товара',
 }
 
-const meta: Meta<typeof ProductModal> = {
+const meta: Meta<ProductModalProps> = {
   title: 'Components/ProductModal',
   component: ProductModal,
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <CartProvider>
+        <Story />
+      </CartProvider>
+    ),
+  ],
   argTypes: {
     product: {
-      description: 'Объект товара, отображаемый в модальном окне',
-      table: {
-        category: 'Данные',
-        type: { summary: 'Product' },
-      },
+      description: 'Объект товара',
+      table: { category: 'Данные', type: { summary: 'Product' } },
+      control: { disable: true },
     },
     onClose: {
-      description: 'Колбэк закрытия модального окна',
-      table: {
-        category: 'Колбэки',
-        type: { summary: '() => void' },
-      },
+      description: 'Колбэк закрытия модалки',
+      table: { category: 'Колбэки', type: { summary: '() => void' } },
       action: 'onClose',
+    },
+    scrollClassName: {
+      description: 'CSS-класс для скролл-контейнера',
+      table: { category: 'Стили', type: { summary: 'string' } },
+      control: 'text',
     },
   },
   args: {
     product: mockProduct,
-    onClose: () => console.log('onClick'),
   },
 }
 
 export default meta
 
-type Story = StoryObj<typeof ProductModal>
+type Story = StoryObj<ProductModalProps>
 
-export const Opened: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(true)
+export const Default: Story = {
+  name: 'По умолчанию',
+}
 
-    const handleClose = () => {
-      setIsOpen(false)
-    }
-
-    return isOpen ? (
-      <ProductModal product={mockProduct} onClose={handleClose} />
-    ) : (
-      <button onClick={() => setIsOpen(true)}>Открыть модальное окно</button>
-    )
+export const WithoutDescription: Story = {
+  name: 'Без описания',
+  args: {
+    product: { ...mockProduct, description: undefined },
   },
 }
