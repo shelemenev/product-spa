@@ -1,8 +1,9 @@
 import { test, vi, describe, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import ProductModal from './ProductModal'
-import { Product, ProductModalHandle } from '../types/types'
+import { Product, ProductModalHandle } from '../../types/types'
 import { useRef } from 'react'
+import { CartProvider } from '../../context/CartContext'
 
 const mockProduct: Product = {
   id: 1,
@@ -11,6 +12,10 @@ const mockProduct: Product = {
   image: '/images/headphones.jpg',
   description: 'Отличные наушники с шумоподавлением',
 }
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <CartProvider>{children}</CartProvider>
+)
 
 describe('ProductModal', () => {
   beforeEach(() => {
@@ -22,7 +27,7 @@ describe('ProductModal', () => {
   })
 
   test('рендерит модалку с данными продукта', () => {
-    render(<ProductModal product={mockProduct} onClose={vi.fn()} />)
+    render(<ProductModal product={mockProduct} onClose={vi.fn()} />, { wrapper })
 
     expect(screen.getByText(mockProduct.title)).toBeInTheDocument()
 
@@ -37,7 +42,7 @@ describe('ProductModal', () => {
 
   test('закрывается при клике на оверлей (фон)', () => {
     const onClose = vi.fn()
-    render(<ProductModal product={mockProduct} onClose={onClose} />)
+    render(<ProductModal product={mockProduct} onClose={onClose} />, { wrapper })
     const overlay = screen.getByTestId('modal-overlay')
     fireEvent.click(overlay)
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -45,7 +50,7 @@ describe('ProductModal', () => {
 
   test('закрывается при клике на кнопку "крестик"', () => {
     const onClose = vi.fn()
-    render(<ProductModal product={mockProduct} onClose={onClose} />)
+    render(<ProductModal product={mockProduct} onClose={onClose} />, { wrapper })
     const closeButton = screen.getByLabelText('Закрыть модальное окно')
     fireEvent.click(closeButton)
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -53,7 +58,7 @@ describe('ProductModal', () => {
 
   test('закрывается при нажатии клавиши Escape', () => {
     const onClose = vi.fn()
-    render(<ProductModal product={mockProduct} onClose={onClose} />)
+    render(<ProductModal product={mockProduct} onClose={onClose} />, { wrapper })
     expect(onClose).not.toHaveBeenCalled()
     fireEvent.keyDown(document, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
@@ -64,10 +69,12 @@ describe('ProductModal', () => {
     const FocusWrapper = () => {
         const inputRef = useRef<HTMLInputElement | null>(null)
         return (
-        <div>
+        <CartProvider>
+          <div>
             <input ref={inputRef} data-testid="previous-focus-input" />
             <ProductModal product={mockProduct} onClose={onClose} />
-        </div>
+          </div>
+        </CartProvider>
         )
     }
 
@@ -89,15 +96,17 @@ describe('ProductModal', () => {
     const TestWithRef = () => {
       const modalRef = useRef<ProductModalHandle | null>(null)
       return (
-        <div>
-          <button
-            data-testid="close-via-ref"
-            onClick={() => modalRef.current?.close()}
-          >
-            Close via Ref
-          </button>
-          <ProductModal ref={modalRef} product={mockProduct} onClose={onCloseSpy} />
-        </div>
+        <CartProvider>
+          <div>
+            <button
+              data-testid="close-via-ref"
+              onClick={() => modalRef.current?.close()}
+            >
+              Close via Ref
+            </button>
+            <ProductModal ref={modalRef} product={mockProduct} onClose={onCloseSpy} />
+          </div>
+        </CartProvider>
       )
     }
 

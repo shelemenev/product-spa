@@ -4,14 +4,16 @@ import {
   forwardRef,
   useImperativeHandle,
 } from 'react'
-import { ProductModalProps, ProductModalHandle } from '../types/types'
+import { ProductModalProps, ProductModalHandle } from '../../types/types'
+import { useCart } from '../../context/CartContext'
 import styles from './ProductModal.module.scss'
 
 const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
   ({ product, onClose }, ref) => {
+    const { addToCart } = useCart()
     const closeButtonRef = useRef<HTMLButtonElement | null>(null)
     const previousActiveElementRef = useRef<HTMLElement | null>(null)
-    
+
     const scrollClassName = styles.bodyNoScroll
 
     useEffect(() => {
@@ -36,11 +38,11 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
         if (prev && typeof prev.focus === 'function') {
           prev.focus()
         }
-        
+
         document.removeEventListener('keydown', handleEscape)
         document.body.classList.remove(scrollClassName)
       }
-    }, [onClose, scrollClassName]) 
+    }, [onClose, scrollClassName])
 
     useImperativeHandle(
       ref,
@@ -88,6 +90,14 @@ const ProductModal = forwardRef<ProductModalHandle, ProductModalProps>(
           <p className={styles.ModalPrice}>
             {product.price.toLocaleString('ru-RU')} руб.
           </p>
+
+          <button
+            className={styles.AddToCartButton}
+            type="button"
+            onClick={() => addToCart(product)}
+          >
+            В корзину
+          </button>
 
           <button className={styles.BuyButton} type="button">
             Купить

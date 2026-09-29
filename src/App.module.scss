@@ -76,3 +76,19 @@ body {
     gap: 3rem;
   }
 }
+
+.HeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 500px;
+}
+
+@media (max-width: 480px) {
+  .HeaderActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}

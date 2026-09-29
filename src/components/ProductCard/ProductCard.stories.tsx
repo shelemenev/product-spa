@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import ProductCard from './ProductCard'
-import { Product, ProductCardProps } from '../types/types'
+import { Product, ProductCardProps } from '../../types/types'
 
 const mockProduct: Product = {
   id: 123,

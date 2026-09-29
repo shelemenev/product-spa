@@ -1,7 +1,8 @@
 import { test, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import ProductCard from './ProductCard'
-import { Product } from '../types/types'
+import { Product } from '../../types/types'
+import { CartProvider } from '../../context/CartContext'
 
 const mockProduct: Product = {
   id: 1,
@@ -10,8 +11,12 @@ const mockProduct: Product = {
   image: '/images/headphones.jpg',
 }
 
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <CartProvider>{children}</CartProvider>
+)
+
 test('отображает заголовок, цену и картинку', () => {
-  render(<ProductCard product={mockProduct} />)
+  render(<ProductCard product={mockProduct} />, { wrapper })
 
   expect(screen.getByAltText(mockProduct.title)).toBeInTheDocument()
   expect(screen.getByText(mockProduct.title)).toBeInTheDocument()
@@ -21,7 +26,7 @@ test('отображает заголовок, цену и картинку', ()
 test('вызывает onClick при клике на карточку', () => {
   const onCardClick = vi.fn()
 
-  render(<ProductCard product={mockProduct} onClick={onCardClick} />)
+  render(<ProductCard product={mockProduct} onClick={onCardClick} />, { wrapper })
 
   const cardElement = screen.getByRole('article')
   expect(cardElement).toBeInTheDocument()
@@ -35,7 +40,7 @@ test('вызывает onClick при клике на карточку', () => {
 test('вызывает onClick при нажатии Enter на карточке', () => {
   const onCardClick = vi.fn()
 
-  render(<ProductCard product={mockProduct} onClick={onCardClick} />)
+  render(<ProductCard product={mockProduct} onClick={onCardClick} />, { wrapper })
 
   const cardElement = screen.getByRole('article')
   expect(cardElement).toBeInTheDocument()
@@ -51,7 +56,7 @@ test('вызывает onClick при нажатии Enter на карточке
 test('вызывает onClick при нажатии Space на карточке', () => {
   const onCardClick = vi.fn()
 
-  render(<ProductCard product={mockProduct} onClick={onCardClick} />)
+  render(<ProductCard product={mockProduct} onClick={onCardClick} />, { wrapper })
 
   const cardElement = screen.getByRole('article')
   expect(cardElement).toBeInTheDocument()
@@ -67,7 +72,7 @@ test('вызывает onClick при нажатии Space на карточке
 test('не вызывает onClick при нажатии других клавиш', () => {
   const onCardClick = vi.fn()
 
-  render(<ProductCard product={mockProduct} onClick={onCardClick} />)
+  render(<ProductCard product={mockProduct} onClick={onCardClick} />, { wrapper })
 
   const cardElement = screen.getByRole('article')
   cardElement.focus()

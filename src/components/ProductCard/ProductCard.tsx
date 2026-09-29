@@ -1,9 +1,12 @@
 import { useCallback, memo } from 'react'
-import type { KeyboardEvent } from 'react'
-import { ProductCardProps } from '../types/types'
+import type { KeyboardEvent, MouseEvent } from 'react'
+import { ProductCardProps } from '../../types/types'
+import { useCart } from '../../context/CartContext'
 import styles from './ProductCard.module.scss'
 
 const ProductCard = ({ product, onClick }: ProductCardProps) => {
+  const { addToCart } = useCart()
+
   const handleClick = useCallback(() => {
     onClick?.(product)
   }, [product, onClick])
@@ -16,6 +19,14 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
       }
     },
     [handleClick]
+  )
+
+  const handleAddToCart = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation()
+      addToCart(product)
+    },
+    [addToCart, product]
   )
 
   return (
@@ -35,6 +46,13 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
       />
       <h3 className={styles.ProductName}>{product.title}</h3>
       <p className={styles.ProductPrice}>{product.price.toLocaleString()} руб.</p>
+      <button
+        className={styles.AddToCartButton}
+        type="button"
+        onClick={handleAddToCart}
+      >
+        В корзину
+      </button>
     </div>
   )
 }
